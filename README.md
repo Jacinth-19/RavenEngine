@@ -6,8 +6,11 @@ A C++17 game engine. This is an early, Phase 1 skeleton.
 
 ```
 Engine/Core/      RavenCore static library: Logger, IModule, Engine, Application
+Engine/World/     RavenWorld static library: World, Entity, components, scene I/O
 Samples/HelloCore Headless sample app that runs one module for 3 frames
+Samples/WorldCube Saves a cube in one process and finds it in a fresh process
 Tests/Core        Dependency-free unit tests for RavenCore (run via CTest)
+Tests/World       Dependency-free unit tests for RavenWorld (run via CTest)
 ```
 
 Dependency direction: higher layers depend on lower ones, never the reverse.
@@ -21,6 +24,32 @@ module registered with the `Engine`.
 - `Engine`: owns modules and drives their lifecycle. If a module fails to
   initialize, only the modules that already initialized are shut down.
 - `Application`: owns an `Engine` and runs the main loop.
+
+## World (Phase 2)
+
+- `Entity`: generational handle. Destroyed slots are reused, and stale handles
+  are rejected by `World::isAlive()`.
+- Components are stored per type. Use `add<T>`, `get<T>`, `has<T>`, `remove<T>`,
+  and `entitiesWith<T>`. Destroying an entity removes all of its components.
+- `WorldModule` is an engine module that owns a `World`.
+- Built-in components: `TransformComponent` (position, quaternion rotation,
+  scale) and `MeshComponent` (mesh name such as `builtin:cube`).
+
+### Scene file (version 1, text)
+
+```
+raven-scene 1
+entity "Cube"
+  transform 0 1 0 0 0 0 1 1 1 1
+  mesh "builtin:cube"
+end
+```
+
+Loading is atomic: a file with any error adds no entities. Unknown component
+lines are skipped with a warning. Serialize/deserialize are fully round-trip.
+
+Adding a component type means adding it to `Scene.cpp`. A generic component
+registry is deferred until there are more types.
 
 ## Build and test
 
