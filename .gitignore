@@ -1,0 +1,10 @@
+# Build output
+build/
+out/
+cmake-build-*/
+
+# Editor / OS noise
+.vscode/
+.idea/
+*.swp
+.DS_Store

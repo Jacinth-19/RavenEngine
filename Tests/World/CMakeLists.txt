@@ -1,0 +1,3 @@
+add_executable(RavenWorldTests WorldTests.cpp)
+target_link_libraries(RavenWorldTests PRIVATE RavenWorld)
+add_test(NAME RavenWorldTests COMMAND RavenWorldTests)
