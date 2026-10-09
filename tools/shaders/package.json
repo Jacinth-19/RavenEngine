@@ -1,0 +1,12 @@
+{
+  "name": "raven-shader-tools",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Build-time GLSL to SPIR-V compiler for Raven (glslang, WASM build)",
+  "scripts": {
+    "compile": "node compile.cjs"
+  },
+  "dependencies": {
+    "@webgpu/glslang": "0.0.15"
+  }
+}
